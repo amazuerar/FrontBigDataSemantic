@@ -1,0 +1,85 @@
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+<div class="jumbotron jumbotron-fluid" style="padding-top: 15px; padding-bottom: 15px; margin-bottom: 10px">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-10 col-md-10">
+        <h3 class="display-4">Análisis y enriquecimiento de información</h3>
+        <p class="lead">Utilizar herramientas de enriquecimiento semántico para el procesamiento de información no estructurada</p>
+        <span class="text-muted">Grupo 10: Diego Fernando Escobar Trujillo - Lucy Jacquelin Morales Diaz - Alejandro Mazuera Rozo</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container-fluid" style="margin-top: 20px;">
+
+  <div class="row">
+
+    <div class="col-4">
+      <div style="height: 900px; overflow: auto">
+        <div id="accordion" role="tablist">
+
+          <div *ngFor="let question of rssQuestions" class="card text-white bg-dark" style="margin-bottom: 15px">
+            <div class="card-header" role="tab" [attr.id]="question._id">
+              <h5 class="mb-0">
+                <span aria-expanded="false" [attr.aria-controls]="question._id">{{question.title}}</span>
+              </h5>
+            </div>
+            <div [attr.id]="question._id" class="collapse show" role="tabpanel" [attr.aria-labelledby]="question._id" data-parent="#accordion">
+              <div class="card-body" [innerHTML]="transform(question.description)">
+              </div>
+
+              <div *ngIf="question.entities_persons.length >0" class="card border-secondary mb-3 text-white bg-dark" style="margin: 5px;">
+                <div class="card-header">Personas</div>
+                <div class="card-body text-secondary">
+                  <p *ngFor="let person of question.entities_persons" class="card-text">{{person}}</p>
+                </div>
+              </div>
+
+              <div *ngIf="question.entities_locations.length >0" class="card border-secondary mb-3 text-white bg-dark" style="margin: 5px;">
+                <div class="card-header">Lugares</div>
+                <div class="card-body text-secondary">
+                  <p *ngFor="let place of question.entities_locations" class="card-text">{{place}}</p>
+                </div>
+              </div>
+
+              <div *ngIf="question.entities_organizations.length >0" class="card border-secondary mb-3 text-white bg-dark" style="margin: 5px;">
+                <div class="card-header">Organizaciones</div>
+                <div class="card-body text-secondary">
+                  <p *ngFor="let org of question.entities_organizations" class="card-text">{{org}}</p>
+                </div>
+              </div>
+
+              <div *ngIf="question.categories.length >0" class="card border-secondary mb-3 text-white bg-dark" style="margin: 5px;">
+                <div class="card-header">Categorías</div>
+                <div class="card-body text-secondary">
+                  <p *ngFor="let category of question.categories" class="card-text">{{category}}</p>
+                </div>
+              </div>
+
+              <a [attr.href]="question.link">
+              <button type="button" class="btn btn-success btn-lg"  style="margin: 5px; width: 99%;">See more in Music Fans</button>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-8">
+      <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+  
+      </agm-map>
+    </div>
+
+  </div>
+</div>
+
+<!-- 
+  <iframe src="https://embed.spotify.com/?uri=spotify:track:3L5JCkhuFHTJfq3ItzKg3H" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+  
+  <iframe src="https://open.spotify.com/embed/artist/6HqPNOo6OV9rPbEY7MP9T8" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>  
+
+-->

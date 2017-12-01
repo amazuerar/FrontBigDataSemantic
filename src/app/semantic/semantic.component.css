@@ -1,0 +1,21 @@
+
+
+.circle {
+  border-radius: 50%;	
+  width: 100px;
+  height: auto;
+}
+
+.circleRow {
+  border-radius: 50%;	
+  width: 60px;
+  height: auto;
+}
+
+.cont:hover .image {
+  opacity: 0.3;
+}
+
+agm-map {
+  height: 300px;
+}
