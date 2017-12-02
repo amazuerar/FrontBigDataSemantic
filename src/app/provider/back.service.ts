@@ -29,4 +29,22 @@ export class BackService {
       .toPromise()
   }
 
+  getEntitiesByID(id) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getEntitiesByID/' + id)
+      .map(res => res.json())
+      .toPromise()
+  }
+
+  getAnswersByID(id) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getAnswersByID/' + id)
+      .map(res => res.json())
+      .toPromise()
+  }
+
+  getLocationsByID(id) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getLocationsByID/' + id)
+      .map(res => res.json())
+      .toPromise()
+  }
+
 }

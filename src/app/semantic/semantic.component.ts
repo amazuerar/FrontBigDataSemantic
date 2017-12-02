@@ -16,8 +16,14 @@ declare var google;
 })
 export class SemanticComponent implements OnInit {
 
+  public loading = false;
   rssQuestions = [];
+  entitiesByID = [];
+  answersById = [];
+  markersByID = [];
 
+  lat = 4.5981;
+  lng = -74.0758;
   zoom = 2;
 
 
@@ -31,7 +37,30 @@ export class SemanticComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.backservice.getQuestions().then(rssQ => { this.rssQuestions = rssQ; console.log(rssQ); });
+    this.loading = true;
+    this.backservice.getQuestions()
+      .then(
+      (rssQ) => {
+      this.rssQuestions = rssQ; this.loading = false;
+      },
+      (error) => { console.error(error); this.loading = false; }
+      );
+  }
+
+  getEnrichment(id) {
+    this.loading = true;
+    this.backservice.getLocationsByID(id).then((locations) => { this.markersByID = locations; this.loading = false; },
+      (error) => { console.error(error); this.loading = false; });
+
+    this.loading = true;
+    this.backservice.getEntitiesByID(id).then((entities) => { this.entitiesByID = entities; this.loading = false; },
+      (error) => { console.error(error); this.loading = false; });
+
+    this.loading = true;
+    this.backservice.getAnswersByID(id).then((answers) => { this.answersById = answers; this.loading = false; },
+      (error) => { console.error(error); this.loading = false; });
+
+
   }
 
   transform(html) {
