@@ -67,8 +67,8 @@
           <a class="nav-link" id="location-tab" data-toggle="tab" href="#location" role="tab" aria-controls="home" aria-selected="false">Locations</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" id="spotify-tab" data-toggle="tab" href="#spotify" role="tab" aria-controls="home" aria-selected="false">Spotify</a>
+        <li class="nav-item" *ngIf="tracksByID.length >0">
+          <a class="nav-link" id="spotify-tab" data-toggle="tab" href="#spotify" role="tab" aria-controls="home" aria-selected="false">Multimedia</a>
         </li>
 
       </ul>
@@ -77,29 +77,29 @@
         <!-- TAB PARA LAS ENTIDADES -->
         <div class="tab-pane fade show active" id="entities" role="tabpanel" aria-labelledby="entities-tab">
 
-          <div *ngFor="let entity of entitiesByID"  style="margin-bottom: 15px">
-            <div *ngIf="entity.entities_persons.length >0" class="card border-secondary mb-3 bg-light" style="margin: 5px;" >
+          <div *ngFor="let entity of entitiesByID" style="margin-bottom: 15px">
+            <div *ngIf="entity.entities_persons.length >0" class="card border-secondary mb-3 bg-light">
               <div class="card-header">People</div>
               <div class="card-body text-secondary">
                 <p *ngFor="let person of entity.entities_persons" class="card-text">{{person}}</p>
               </div>
             </div>
 
-            <div *ngIf="entity.entities_locations.length >0" class="card border-secondary mb-3 bg-light" >
+            <div *ngIf="entity.entities_locations.length >0" class="card border-secondary mb-3 bg-light">
               <div class="card-header">Locations</div>
               <div class="card-body text-secondary">
                 <p *ngFor="let place of entity.entities_locations" class="card-text">{{place}}</p>
               </div>
             </div>
 
-            <div *ngIf="entity.entities_organizations.length >0" class="card border-secondary mb-3 bg-light" >
+            <div *ngIf="entity.entities_organizations.length >0" class="card border-secondary mb-3 bg-light">
               <div class="card-header">Organizations</div>
               <div class="card-body text-secondary">
                 <p *ngFor="let org of entity.entities_organizations" class="card-text">{{org}}</p>
               </div>
             </div>
 
-            <div *ngIf="entity.categories.length >0" class="card border-secondary mb-3 bg-light" style="margin: 5px;">
+            <div *ngIf="entity.categories.length >0" class="card border-secondary mb-3 bg-light">
               <div class="card-header">Categories</div>
               <div class="card-body text-secondary">
                 <p *ngFor="let category of entity.categories" class="card-text">{{category}}</p>
@@ -164,7 +164,7 @@
             </div>
 
           </div>
-       
+
         </div>
 
         <!-- TAB PARA EL MAPA (PRIMER PUNTO) -->
@@ -179,8 +179,37 @@
           </div>
         </div>
 
-        <!-- TAB PARA SPOTIFY -->
-        <div class="tab-pane fade" id="spotify" role="tabpanel" aria-labelledby="spotify-tab">...</div>
+        <!-- TAB PARA SPOTIFY (SEXTO PUNTO)-->
+        <div *ngIf="tracksByID.length >0" class="tab-pane fade" id="spotify" role="tabpanel" aria-labelledby="spotify-tab">
+          <div style="height: 580px; overflow: auto">
+            <div *ngFor="let t of tracksByID;" class="card border-secondary mb-3 bg-light" style="margin: 5px;">
+              <div class="card-header">{{t.artist}}</div>
+              <div class="card-body text-secondary">
+
+                <div class="row card-group">
+                  <div class="col-3" *ngFor="let track of t.tracks;">
+                    <div class="card border-secondary mb-3 bg-light" style="margin: 5px; height: 670px;">
+                      <div class="card-body text-secondary">
+                        <p class="card-text"><strong>Album Name: </strong>{{track.album_name}}</p>
+                        <p class="card-text"><strong>Song Name: </strong>{{track.name}}</p>
+                        <iframe [src]="getUriTrack(track.uri) | safe" width="100%" height="380" frameborder="0" allowtransparency="true"></iframe>
+                        <a [attr.href]="getUrlOpenAlbum(track.album_uri)">
+                         <button type="button" class="btn btn-success btn-lg"  style="margin: 5px; width: 99%;">Album on Spotify</button>
+                        </a>
+                        <a [attr.href]="getYoutubeUrlOpenAlbum(track.name, track.artist_found_name)">
+                         <button type="button" class="btn btn-danger btn-lg"  style="margin: 5px; width: 99%;">Watch on YouTube</button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
 
 
       </div>

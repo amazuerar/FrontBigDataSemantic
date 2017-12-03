@@ -21,6 +21,7 @@ export class SemanticComponent implements OnInit {
   entitiesByID = [];
   answersById = [];
   markersByID = [];
+  tracksByID = [];
 
   lat = 4.5981;
   lng = -74.0758;
@@ -41,7 +42,7 @@ export class SemanticComponent implements OnInit {
     this.backservice.getQuestions()
       .then(
       (rssQ) => {
-      this.rssQuestions = rssQ; this.loading = false;
+        this.rssQuestions = rssQ; this.loading = false;
       },
       (error) => { console.error(error); this.loading = false; }
       );
@@ -60,11 +61,27 @@ export class SemanticComponent implements OnInit {
     this.backservice.getAnswersByID(id).then((answers) => { this.answersById = answers; this.loading = false; },
       (error) => { console.error(error); this.loading = false; });
 
+    this.loading = true;
+    this.backservice.getTracksByID(id).then((tracks) => { this.tracksByID = tracks; this.loading = false; },
+      (error) => { console.error(error); this.loading = false; });
+
 
   }
 
   transform(html) {
     return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  getUriTrack(uri) {
+    return 'https://embed.spotify.com/?uri=' + uri;
+  }
+
+  getUrlOpenAlbum(uri) {
+    return 'https://open.spotify.com/embed?uri=' + uri;
+  }
+
+  getYoutubeUrlOpenAlbum(uri, name) {
+    return 'https://www.youtube.com/results?search_query=' + uri + ' ' + name;
   }
 
   latitude(url) {

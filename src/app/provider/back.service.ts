@@ -47,4 +47,10 @@ export class BackService {
       .toPromise()
   }
 
+  getTracksByID(id) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getTracksByID/' + id)
+      .map(res => res.json())
+      .toPromise()
+  }
+
 }
