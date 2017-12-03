@@ -84,6 +84,11 @@ export class SemanticComponent implements OnInit {
     return 'https://www.youtube.com/results?search_query=' + uri + ' ' + name;
   }
 
+  marketImage(name) {
+    const mark = name.toLowerCase();
+    return 'assets/' + mark + '.png';
+  }
+
   latitude(url) {
     this.mapsAPILoader.load().then(() => {
       console.log('google script loaded');
