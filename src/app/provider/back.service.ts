@@ -53,4 +53,22 @@ export class BackService {
       .toPromise()
   }
 
+  getTweetsByID(id) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getTweetsByID/' + id)
+      .map(res => res.json())
+      .toPromise()
+  }
+
+  getSimilarQuestionsByID(id) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getSimilarQuestionsByID/' + id)
+      .map(res => res.json())
+      .toPromise()
+  }
+
+  getQuestionsByQuery(query) {
+    return this.http.get('http://' + this.address + ':' + this.port + '/getQuestionsByQuery/' + query)
+      .map(res => res.json())
+      .toPromise()
+  }
+
 }

@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BackService } from '../provider/back.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
+import { DecimalPipe } from '@angular/common';
 
 declare var google;
 
@@ -17,11 +18,14 @@ declare var google;
 export class SemanticComponent implements OnInit {
 
   public loading = false;
+  query = '';
   rssQuestions = [];
   entitiesByID = [];
   answersById = [];
   markersByID = [];
   tracksByID = [];
+  tweetsByID = [];
+  similarByID = [];
 
   lat = 4.5981;
   lng = -74.0758;
@@ -49,6 +53,13 @@ export class SemanticComponent implements OnInit {
   }
 
   getEnrichment(id) {
+    this.entitiesByID = [];
+    this.answersById = [];
+    this.markersByID = [];
+    this.tracksByID = [];
+    this.tweetsByID = [];
+    this.similarByID = [];
+
     this.loading = true;
     this.backservice.getLocationsByID(id).then((locations) => { this.markersByID = locations; this.loading = false; },
       (error) => { console.error(error); this.loading = false; });
@@ -65,7 +76,58 @@ export class SemanticComponent implements OnInit {
     this.backservice.getTracksByID(id).then((tracks) => { this.tracksByID = tracks; this.loading = false; },
       (error) => { console.error(error); this.loading = false; });
 
+    this.loading = true;
+    this.backservice.getTweetsByID(id).then((tweets) => { this.tweetsByID = tweets; this.loading = false; },
+      (error) => { console.error(error); this.loading = false; });
 
+    this.loading = true;
+    this.backservice.getSimilarQuestionsByID(id).then((similar) => { this.similarByID = similar; this.loading = false; },
+      (error) => { console.error(error); this.loading = false; });
+
+
+  }
+
+  search() {
+
+    if (this.query !== '') {
+      this.rssQuestions = [];
+      this.entitiesByID = [];
+      this.answersById = [];
+      this.markersByID = [];
+      this.tracksByID = [];
+      this.tweetsByID = [];
+      this.similarByID = [];
+      this.loading = true;
+      this.backservice.getQuestionsByQuery(this.query)
+        .then(
+        (rssQ) => {
+          this.rssQuestions = rssQ; this.loading = false;
+        },
+        (error) => { console.error(error); this.loading = false; }
+        );
+    } else {
+      alert('Write whatever you are seeking for');
+    }
+
+  }
+
+  clean() {
+    this.query = '';
+    this.rssQuestions = [];
+    this.entitiesByID = [];
+    this.answersById = [];
+    this.markersByID = [];
+    this.tracksByID = [];
+    this.tweetsByID = [];
+    this.similarByID = [];
+    this.loading = true;
+    this.backservice.getQuestions()
+      .then(
+      (rssQ) => {
+        this.rssQuestions = rssQ; this.loading = false;
+      },
+      (error) => { console.error(error); this.loading = false; }
+      );
   }
 
   transform(html) {
@@ -82,6 +144,10 @@ export class SemanticComponent implements OnInit {
 
   getYoutubeUrlOpenAlbum(uri, name) {
     return 'https://www.youtube.com/results?search_query=' + uri + ' ' + name;
+  }
+
+  getTweetStatusm(name, id) {
+    return 'https://twitter.com/' + name + '/status/' + id;
   }
 
   marketImage(name) {

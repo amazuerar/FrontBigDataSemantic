@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-10 col-md-10">
-        <h3 class="display-4">Análisis y enriquecimiento de información</h3>
+        <h4 class="display-4">Enriquecimiento de información</h4>
         <p class="lead">Utilizar herramientas de enriquecimiento semántico para el procesamiento de información no estructurada</p>
         <span class="text-muted">Grupo 10: Diego Fernando Escobar Trujillo - Lucy Jacquelin Morales Diaz - Alejandro Mazuera Rozo</span>
       </div>
@@ -17,8 +17,20 @@
   <div class="row">
 
     <div class="col-4">
+      <div class="form-row">
+        <div class="form-group col-md-8">
+          <input type="text" class="form-control" placeholder="Seek for persons,places,organizations,topics or write a question"
+            [(ngModel)]="query">
+        </div>
+        <div class="form-group col-md-2">
+          <button (click)="search()" class="form-control btn btn-success">Search</button>
+        </div>
+        <div class="form-group col-md-2">
+          <button (click)="clean()" class="form-control btn btn-success">Clean</button>
+        </div>
+      </div>
       <h2 style="text-align: center">Music Fans Exchange Questions</h2>
-      <div style="height: 900px; overflow: auto">
+      <div style="height: 825px; overflow: auto">
         <div id="accordion" role="tablist">
 
           <div *ngFor="let question of rssQuestions" class="card bg-light" style="margin-bottom: 15px">
@@ -31,6 +43,8 @@
 
               <div class="card-body">
                 <h4 class="card-title">Description</h4>
+                <strong *ngIf="question.score !=null">Similarity score: <h5><span class="badge badge-warning">{{question.score | number:'1.1-2'}}</span></h5> </strong>
+                <strong *ngIf="question.type !=null">Type:</strong> {{question.type}}<br>
                 <p class="card-text" [innerHTML]="transform(question.description)"> </p>
               </div>
 
@@ -71,13 +85,21 @@
           <a class="nav-link" id="spotify-tab" data-toggle="tab" href="#spotify" role="tab" aria-controls="home" aria-selected="false">Multimedia</a>
         </li>
 
+        <li class="nav-item" *ngIf="tweetsByID.length >0">
+          <a class="nav-link" id="tweets-tab" data-toggle="tab" href="#tweets" role="tab" aria-controls="home" aria-selected="false">Tweets</a>
+        </li>
+
+        <li class="nav-item" *ngIf="similarByID.length >0">
+          <a class="nav-link" id="similar-tab" data-toggle="tab" href="#similar" role="tab" aria-controls="home" aria-selected="false">Similar Questions</a>
+        </li>
+
       </ul>
       <div class="tab-content" id="myTabContent">
 
         <!-- TAB PARA LAS ENTIDADES -->
         <div class="tab-pane fade show active" id="entities" role="tabpanel" aria-labelledby="entities-tab">
 
-          <div *ngFor="let entity of entitiesByID" style="margin-bottom: 15px">
+          <div *ngFor="let entity of entitiesByID" style="margin-bottom: 15px; margin-top: 5px">
             <div *ngIf="entity.entities_persons.length >0" class="card border-secondary mb-3 bg-light">
               <div class="card-header">People</div>
               <div class="card-body text-secondary">
@@ -169,7 +191,7 @@
 
         <!-- TAB PARA EL MAPA (PRIMER PUNTO) -->
         <div *ngIf="markersByID.length >0" class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
-          <div *ngFor="let m of markersByID;" class="card border-secondary mb-3 bg-light" style="margin: 5px;">
+          <div *ngFor="let m of markersByID;" class="card border-secondary mb-3 bg-light" style="margin-top: 5px;">
             <div class="card-header">{{m.name}}</div>
             <div class="card-body text-secondary">
               <p class="card-text"><strong>Address: </strong>{{m.description}}</p>
@@ -182,7 +204,7 @@
         <!-- TAB PARA SPOTIFY (SEXTO PUNTO)-->
         <div *ngIf="tracksByID.length >0" class="tab-pane fade" id="spotify" role="tabpanel" aria-labelledby="spotify-tab">
           <div style="height: 580px; overflow: auto">
-            <div *ngFor="let t of tracksByID;" class="card border-secondary mb-3 bg-light" style="margin: 5px;">
+            <div *ngFor="let t of tracksByID;" class="card border-secondary mb-3 bg-light" style="margin-top: 5px;">
               <div class="card-header">{{t.artist}}</div>
               <div class="card-body text-secondary">
 
@@ -205,14 +227,71 @@
                     </div>
                   </div>
                 </div>
-
-
-
               </div>
             </div>
           </div>
         </div>
 
+        <!-- TAB PARA TWEETS (QUINTO PUNTO) -->
+        <div *ngIf="tweetsByID.length >0" class="tab-pane fade" id="tweets" role="tabpanel" aria-labelledby="tweets-tab">
+          <div style="height: 580px; overflow: auto">
+            <div *ngFor="let entity of tweetsByID;" class="card border-secondary mb-3 bg-light" style="margin-top: 5px;">
+              <div class="card-header">Tweets related to {{entity.descripction}}</div>
+              <div class="card-body text-secondary">
+
+                <div class="row card-group">
+                  <div class="col-12" *ngFor="let tweets of entity.tweets;">
+                    <div class="card border-secondary mb-3 bg-light" style="margin: 5px; height: auto;">
+                      <div class="card-body text-secondary">
+
+                        <strong>Author: </strong>
+                        <a href="https://twitter.com/{{tweets.screen_name}}">{{tweets.screen_name}}</a><br>
+
+                        <strong>Tweet: </strong>
+                        <p [innerHTML]="transform(tweets.text)"></p>
+
+                        <strong *ngIf="tweets.entities_mentions.length >0">Entities mentioned</strong>
+                        <ul>
+                          <li *ngFor="let mentions of tweets.entities_mentions;">
+                            <a href="https://twitter.com/{{mentions}}">{{mentions}}</a>
+                          </li>
+                        </ul>
+                        <a [attr.href]="getTweetStatusm(tweets.screen_name, tweets.tid)">
+                         <button type="button" class="btn btn-info btn-lg"  style="margin: 5px; width: 99%;">Check this tweet</button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PARA PREGUNTAS SIMILARES (SEPTIMO PUNTO) -->
+        <div *ngIf="similarByID.length >0" class="tab-pane fade" id="similar" role="tabpanel" aria-labelledby="tweets-tab">
+          <div style="height: 580px; overflow: auto">
+            <div *ngFor="let question of similarByID" class="card bg-light" style="margin-bottom: 15px; margin-top: 5px">
+              <div class="card-header" role="tab" [attr.id]="question._id">
+                <h5 class="mb-0">
+                  <span aria-expanded="false" [attr.aria-controls]="question._id">{{question.title}}</span>
+                </h5>
+              </div>
+              <div [attr.id]="question._id" class="collapse show" role="tabpanel" [attr.aria-labelledby]="question._id" data-parent="#accordion">
+
+                <div class="card-body">
+                  <strong>Type:</strong> {{question.type}}<br>
+                  <strong>Similarity score: <h5><span class="badge badge-warning">{{question.score | number:'1.1-2'}}</span></h5> </strong> 
+                  <h4 class="card-title">Description</h4>
+                  <p class="card-text" [innerHTML]="transform(question.description)"> </p>
+                </div>
+                <a [attr.href]="question.link">
+              <button type="button" class="btn btn-success btn-lg"  style="margin: 5px; width: 99%;">See more in Music Fans Web Page</button>
+              </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
 
