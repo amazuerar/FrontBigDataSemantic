@@ -7,6 +7,7 @@ import { BackService } from '../provider/back.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { DecimalPipe } from '@angular/common';
+import { NgProgress } from 'ngx-progressbar';
 
 declare var google;
 
@@ -39,6 +40,7 @@ export class SemanticComponent implements OnInit {
     private elementRef: ElementRef,
     private backservice: BackService,
     private fb: FormBuilder,
+    public progress: NgProgress,
     private ngZone: NgZone) {
   }
 
@@ -61,7 +63,6 @@ export class SemanticComponent implements OnInit {
     this.tweetsByID = [];
     this.similarByID = [];
     this.sparqlEntityByID = [];
-
 
 
     this.loading = true;
@@ -92,7 +93,6 @@ export class SemanticComponent implements OnInit {
     this.backservice.getSimilarQuestionsByID(id).then((similar) => { this.similarByID = similar; this.loading = false; },
       (error) => { console.error(error); this.loading = false; });
 
-    this.loading = false;
 
   }
 

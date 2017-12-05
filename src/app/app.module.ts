@@ -15,6 +15,8 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { LoadingModule } from 'ngx-loading';
 import { SafePipe } from './pipe/safe-url.pipe';
 import { NormalPipe } from './normal.pipe';
+import { NgProgressModule } from 'ngx-progressbar';
+
 
 const appRoutes: Routes = [
   { path: 'Semantic', component: SemanticComponent },
@@ -33,6 +35,7 @@ const appRoutes: Routes = [
     LoadingModule,
     BrowserModule,
     CommonModule,
+    NgProgressModule,
     BrowserAnimationsModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),

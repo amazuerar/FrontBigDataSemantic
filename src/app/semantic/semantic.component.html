@@ -1,4 +1,6 @@
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+<ng-progress [positionUsing]="'marginLeft'" [direction]="'leftToRightIncreased'" [color]="'#4286f4'" [trickleSpeed]="500"
+  [thick]="true" [ease]="'easeInSine'"></ng-progress>
 <div class="jumbotron jumbotron-fluid" style="padding-top: 15px; padding-bottom: 15px; margin-bottom: 10px">
   <div class="container">
     <div class="row">
@@ -316,7 +318,7 @@
                     <div class="card-body" style="height: 100%;">
                       <h4 *ngIf="entity.bindings[0].name !==undefined" class="card-title">{{entity.bindings[0].name.value}}</h4>
                       <p *ngIf="entity.bindings[0].abstract !==undefined" class="card-title">{{entity.bindings[0].abstract.value}}</p>
-                      <p *ngIf="entity.bindings[0].genre !==undefined" class="card-text"><b>Genre: </b> <a href="{{entity.bindings[0].genre.value}}"> {{entity.bindings[0].genre.value | normal}} </a> </p>
+                      <p *ngIf="entity.bindings[0].genre !==undefined" class="card-text"><b>Genre: </b> <a href="{{entity.bindings[0].genre.value}}"> {{entity.bindings[0].genre.value | normal}} </a>                        </p>
                       <p *ngIf="entity.bindings[0].birthPlace !==undefined" class="card-text"><b>Birth Place: </b> <a href="{{entity.bindings[0].birthPlace.value}}"> {{entity.bindings[0].birthPlace.value | normal}} </a></p>
                       <p *ngIf="entity.bindings[0].birthDate !==undefined" class="card-text"><b>Birth Date: </b>{{entity.bindings[0].birthDate.value}}</p>
                       <a *ngIf="entity.bindings[0].singer !==undefined" href="{{entity.bindings[0].singer.value}}">
