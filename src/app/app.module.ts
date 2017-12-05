@@ -14,6 +14,7 @@ import { AgmCoreModule } from '@agm/core';
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { LoadingModule } from 'ngx-loading';
 import { SafePipe } from './pipe/safe-url.pipe';
+import { NormalPipe } from './normal.pipe';
 
 const appRoutes: Routes = [
   { path: 'Semantic', component: SemanticComponent },
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
     AppComponent,
     SemanticComponent,
     SafePipe,
+    NormalPipe,
   ],
   imports: [
     AgmJsMarkerClustererModule,

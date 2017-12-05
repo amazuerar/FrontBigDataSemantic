@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
@@ -12,8 +12,8 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class BackService {
 
-  // address = "172.24.100.104";
-  address = '127.0.0.1';
+  address = '172.24.100.104';
+  // address = '127.0.0.1';
   port = '8083';
 
   /**
@@ -67,6 +67,13 @@ export class BackService {
 
   getQuestionsByQuery(query) {
     return this.http.get('http://' + this.address + ':' + this.port + '/getQuestionsByQuery/' + query)
+      .map(res => res.json())
+      .toPromise()
+  }
+
+  GetSparqlQueryByID(id) {
+    const url = 'http://' + this.address + ':' + this.port + '/getSparqlQuery/' + id;
+    return this.http.get(url)
       .map(res => res.json())
       .toPromise()
   }

@@ -26,6 +26,7 @@ export class SemanticComponent implements OnInit {
   tracksByID = [];
   tweetsByID = [];
   similarByID = [];
+  sparqlEntityByID = [];
 
   lat = 4.5981;
   lng = -74.0758;
@@ -59,6 +60,9 @@ export class SemanticComponent implements OnInit {
     this.tracksByID = [];
     this.tweetsByID = [];
     this.similarByID = [];
+    this.sparqlEntityByID = [];
+
+
 
     this.loading = true;
     this.backservice.getLocationsByID(id).then((locations) => { this.markersByID = locations; this.loading = false; },
@@ -81,9 +85,14 @@ export class SemanticComponent implements OnInit {
       (error) => { console.error(error); this.loading = false; });
 
     this.loading = true;
+    this.backservice.GetSparqlQueryByID(id).then((sparql) => { this.sparqlEntityByID = sparql; this.loading = false; console.log(sparql); },
+      (error) => { console.error(error); this.loading = false; });
+
+    this.loading = true;
     this.backservice.getSimilarQuestionsByID(id).then((similar) => { this.similarByID = similar; this.loading = false; },
       (error) => { console.error(error); this.loading = false; });
 
+    this.loading = false;
 
   }
 
@@ -97,6 +106,7 @@ export class SemanticComponent implements OnInit {
       this.tracksByID = [];
       this.tweetsByID = [];
       this.similarByID = [];
+      this.sparqlEntityByID = [];
       this.loading = true;
       this.backservice.getQuestionsByQuery(this.query)
         .then(
@@ -120,6 +130,7 @@ export class SemanticComponent implements OnInit {
     this.tracksByID = [];
     this.tweetsByID = [];
     this.similarByID = [];
+    this.sparqlEntityByID = [];
     this.loading = true;
     this.backservice.getQuestions()
       .then(
