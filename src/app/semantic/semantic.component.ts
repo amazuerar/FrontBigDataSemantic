@@ -66,7 +66,7 @@ export class SemanticComponent implements OnInit {
 
 
     this.loading = true;
-    this.backservice.getLocationsByID(id).then((locations) => { this.markersByID = locations; this.loading = false; },
+    this.backservice.getLocationsByID(id).then((locations) => { this.markersByID = locations; },
       (error) => { console.error(error); this.loading = false; });
 
     this.loading = true;
@@ -86,7 +86,7 @@ export class SemanticComponent implements OnInit {
       (error) => { console.error(error); this.loading = false; });
 
     this.loading = true;
-    this.backservice.GetSparqlQueryByID(id).then((sparql) => { this.sparqlEntityByID = sparql; this.loading = false; console.log(sparql); },
+    this.backservice.GetSparqlQueryByID(id).then((sparql) => { this.sparqlEntityByID = sparql; this.loading = false; },
       (error) => { console.error(error); this.loading = false; });
 
     this.loading = true;
@@ -164,6 +164,10 @@ export class SemanticComponent implements OnInit {
   marketImage(name) {
     const mark = name.toLowerCase();
     return 'assets/' + mark + '.png';
+  }
+
+  toInt(number) {
+    return parseInt(number, 10);
   }
 
   latitude(url) {

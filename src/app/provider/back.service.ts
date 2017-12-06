@@ -12,8 +12,8 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class BackService {
 
-  address = '172.24.100.104';
-  // address = '127.0.0.1';
+  // address = '172.24.100.104';
+   address = '127.0.0.1';
   port = '8083';
 
   /**
@@ -42,7 +42,7 @@ export class BackService {
   }
 
   getLocationsByID(id) {
-    return this.http.get('http://' + this.address + ':' + this.port + '/getLocationsByID/' + id)
+    return this.http.get('http://' + this.address + ':' + this.port + '/getLocationsViaSparqlQuery/' + id)
       .map(res => res.json())
       .toPromise()
   }

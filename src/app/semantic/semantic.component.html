@@ -65,9 +65,9 @@
 
     <div class="col-8">
       <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-        <agm-marker *ngFor="let m of markersByID;" [openInfoWindow]=true [latitude]="m.latitude" [longitude]="m.longitude" (markerClick)="gm.lastOpen?.close(); gm.lastOpen = infoWindow">
+        <agm-marker *ngFor="let m of markersByID;" [openInfoWindow]=true [latitude]="toInt(m.bindings[0].lat.value)" [longitude]="toInt(m.bindings[0].long.value)">
           <agm-info-window #infoWindow>
-            <strong><b>{{m.description}}: </b></strong>
+            <strong><b>{{m.bindings[0].name.value}} </b></strong>
           </agm-info-window>
         </agm-marker>
       </agm-map>
@@ -196,12 +196,31 @@
 
         <!-- TAB PARA EL MAPA (PRIMER PUNTO) -->
         <div *ngIf="markersByID.length >0" class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
-          <div *ngFor="let m of markersByID;" class="card border-secondary mb-3 bg-light" style="margin-top: 5px;">
-            <div class="card-header">{{m.name}}</div>
-            <div class="card-body text-secondary">
-              <p class="card-text"><strong>Address: </strong>{{m.description}}</p>
-              <p class="card-text"><strong>Latitude: </strong>{{m.latitude}}</p>
-              <p class="card-text"><strong>Longitude: </strong>{{m.longitude}}</p>
+          <div style="height: 680px; overflow: auto">
+            <div *ngFor="let entity of markersByID;" style="margin-bottom: 5px; margin-top: 5px;">
+              <div class="row">
+                <div class="col col-3">
+                  <div class="card">
+                    <div *ngIf="entity.bindings[0].thumbnail !==undefined">
+                      <img class="card-img-top" src="{{entity.bindings[0].thumbnail.value}}">
+                    </div>
+                    <div *ngIf="entity.bindings[0].thumbnail ===undefined">
+                      <img class="card-img-top" src="assets/noflag.png">
+                    </div>
+                  </div>
+                </div>
+                <div class="col col-9">
+                  <div class="card" style="height: 100%;">
+                    <div class="card-body" style="height: 100%;">
+                      <h4 *ngIf="entity.bindings[0].name !==undefined" class="card-title">{{entity.bindings[0].name.value}}</h4>
+                      <p *ngIf="entity.bindings[0].abstract !==undefined" class="card-title">{{entity.bindings[0].abstract.value}}</p>
+                      <p *ngIf="entity.bindings[0].lat !==undefined" class="card-text"><b>Latitude: </b>{{entity.bindings[0].lat.value}}</p>
+                      <p *ngIf="entity.bindings[0].long !==undefined" class="card-text"><b>Longitude: </b>{{entity.bindings[0].long.value}}</p>
+                      <p *ngIf="entity.bindings[0].homepage !==undefined" class="card-text"><b>Homepage: </b>{{entity.bindings[0].homepage.value}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
